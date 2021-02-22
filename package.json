@@ -1,0 +1,63 @@
+{
+  "name": "spotify-web-api-starter",
+  "version": "0.1.0",
+  "repository": "https://github.com/eegli/spotify-web-api-starter",
+  "private": true,
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.5.0",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.7.1",
+    "axios": "^0.21.1",
+    "nanoid": "^3.1.20",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-redux": "^7.2.2",
+    "react-scripts": "4.0.2",
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
+    "typescript": "^4.1.5",
+    "web-vitals": "^1.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "prebuild": "yarn format:check && yarn test:prebuild",
+    "build": "react-scripts build",
+    "format": "yarn prettier --write \"src/**/*.{ts,tsx,js,jsx,css}\"",
+    "format:check": "yarn prettier --check src/",
+    "test": "react-scripts test",
+    "test:prebuild": "react-scripts test --watchAll=false",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.31",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.1",
+    "@types/react-redux": "^7.1.16",
+    "@types/redux-logger": "^3.0.8",
+    "@types/spotify-api": "^0.0.7",
+    "@types/webpack-env": "^1.16.0",
+    "prettier": "2.2.1",
+    "prettier-plugin-organize-imports": "^1.1.1",
+    "ts-jest": "^26.5.1"
+  }
+}

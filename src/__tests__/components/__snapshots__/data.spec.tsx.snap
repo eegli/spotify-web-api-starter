@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`data renders correctly renders formatted json 1 1`] = `
+<div
+  class="alert alert-danger"
+  role="alert"
+>
+  <pre
+    data-testid="json-data"
+  >
+    {
+  "album_type": "COMPILATION",
+  "href": "https://api.spotify.com/v1/albums/3wIq5okaszSGMxYv4zlzyR",
+  "artists": [],
+  "disc_number": 1,
+  "duration_ms": 340965,
+  "explicit": false,
+  "external_ids": {
+    "isrc": "GBKPL1817555"
+  },
+  "external_urls": {
+    "spotify": "https://open.spotify.com/track/2Vrg4Ar4v8KECMdwck1DRl"
+  },
+  "id": "2Vrg4Ar4v8KECMdwck1DRl",
+  "is_local": false,
+  "name": "Low - Kaskade Remix",
+  "popularity": 46,
+  "track_number": 2,
+  "type": "track",
+  "uri": "spotify:track:2Vrg4Ar4v8KECMdwck1DRl"
+}
+  </pre>
+</div>
+`;
+
+exports[`data renders correctly renders formatted json 2 1`] = `
+<div
+  class="alert alert-danger"
+  role="alert"
+>
+  <pre
+    data-testid="json-data"
+  >
+    [
+  {
+    "album_type": "COMPILATION",
+    "href": "https://api.spotify.com/v1/albums/3wIq5okaszSGMxYv4zlzyR",
+    "artists": [],
+    "disc_number": 1,
+    "duration_ms": 340965,
+    "explicit": false,
+    "external_ids": {
+      "isrc": "GBKPL1817555"
+    },
+    "external_urls": {
+      "spotify": "https://open.spotify.com/track/2Vrg4Ar4v8KECMdwck1DRl"
+    },
+    "id": "2Vrg4Ar4v8KECMdwck1DRl",
+    "is_local": false,
+    "name": "Low - Kaskade Remix",
+    "popularity": 46,
+    "track_number": 2,
+    "type": "track",
+    "uri": "spotify:track:2Vrg4Ar4v8KECMdwck1DRl"
+  }
+]
+  </pre>
+</div>
+`;
