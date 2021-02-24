@@ -1,7 +1,7 @@
 // Regular Error Object from the Spotify Web API
 interface SpotifyRegularError {
-  status: number;
-  message: string;
+  readonly status: number;
+  readonly message: string;
 }
 
 export interface ValidationErrors {

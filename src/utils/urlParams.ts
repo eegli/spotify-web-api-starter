@@ -7,7 +7,7 @@ export interface AccessTokenObj {
 
 type WindowLocation = Pick<Location, 'search' | 'hash'>;
 
-export const getParamsFromUrl = (loc: WindowLocation): AccessTokenObj => {
+export const getParamsFromUrl = (loc: WindowLocation): Readonly<AccessTokenObj> => {
   // When the user cancels the authorization, we get an error
   // parameter. E.g. ?error=access_denied&state=123
   const error = new URLSearchParams(loc.search).get('error');
