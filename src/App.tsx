@@ -132,6 +132,7 @@ const App: React.FC = () => {
   //    track genres
   // 4. Fetch the audio features for each track
   // 5. Fetch the user's top tracks
+  // 6. Fetch the user's recently played tracks
 
   useEffect(() => {
     if (token.accessToken) {
@@ -524,6 +525,7 @@ const App: React.FC = () => {
           </>
         )}
       </main>
+
       <Footer />
     </>
   );
