@@ -14,7 +14,8 @@ const clientId =
 
 // Change the scopes to what you need
 // https://developer.spotify.com/documentation/general/guides/scopes/
-const scopes = 'user-read-email user-top-read user-library-read';
+const scopes =
+  'user-read-email user-top-read user-library-read user-read-recently-played';
 
 export const spotifyUrl = (state: string) => {
   let url = 'https://accounts.spotify.com/authorize';
@@ -29,10 +30,11 @@ export const spotifyUrl = (state: string) => {
 
 export enum Endpoints {
   GetCurrentUsersProfile = '/v1/me',
-  GetUsersSavedTracks = '/v1/me/tracks',
-  GetUsersTopTracks = '/v1/me/top/tracks',
-  GetMultipleArtists = 'v1/artists',
-  GetMultipleAudioFeatures = 'v1/audio-features',
+  GetSavedTracks = '/v1/me/tracks',
+  GetTopTracks = '/v1/me/top/tracks',
+  GetMultipleArtists = '/v1/artists',
+  GetMultipleAudioFeatures = '/v1/audio-features',
+  GetRecentlyPlayedTracks = '/v1/me/player/recently-played',
 }
 
 interface InstanceParams<P = any> {

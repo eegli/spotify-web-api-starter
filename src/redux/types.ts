@@ -1,3 +1,6 @@
+// General Utility
+export type PickType<T, K extends keyof T> = T[K];
+
 // Regular Error Object from the Spotify Web API
 interface SpotifyRegularError {
   readonly status: number;
@@ -34,4 +37,10 @@ export interface MultipleArtistsParams {
 
 export interface MultipleAudioFeaturesParams {
   ids: string;
+}
+
+export interface RecentlyPlayedTracksParams {
+  limit?: number;
+  after?: number;
+  before?: number;
 }

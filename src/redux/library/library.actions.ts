@@ -5,6 +5,7 @@ import { RootState } from '../root.reducer';
 import {
   MultipleArtistsParams,
   MultipleAudioFeaturesParams,
+  RecentlyPlayedTracksParams,
   SavedTracksParams,
   TopTracksParams,
   ValidationErrors,
@@ -14,6 +15,7 @@ type SavedTracksResponse = SpotifyApi.UsersSavedTracksResponse;
 type TopTracksResponse = SpotifyApi.UsersTopTracksResponse;
 type MultipleArtistsResponse = SpotifyApi.MultipleArtistsResponse;
 type MultipleAudioFeaturesResponse = SpotifyApi.MultipleAudioFeaturesResponse;
+type RecentlyPlayedTracksResponse = SpotifyApi.UsersRecentlyPlayedTracksResponse;
 
 export const fetchAudioFeatures = createAsyncThunk<
   MultipleAudioFeaturesResponse,
@@ -62,7 +64,7 @@ export const fetchArtistGenres = createAsyncThunk<
   }
 });
 
-export const fetchUsersSavedTracks = createAsyncThunk<
+export const fetchSavedTracks = createAsyncThunk<
   SavedTracksResponse,
   // This thunk accepts an optional url to do follow up requests on
   // the paginated endpoint to fetch the whole library. If we want
@@ -74,7 +76,7 @@ export const fetchUsersSavedTracks = createAsyncThunk<
     state: RootState;
   }
 >(
-  'library/fetchUsersSavedTracks',
+  'library/fetchSavedTracks',
   async (params, { rejectWithValue, getState }) => {
     const offset = getState().library.tracks.items.length;
     const axios = instance<SavedTracksParams>({
@@ -82,7 +84,7 @@ export const fetchUsersSavedTracks = createAsyncThunk<
     });
 
     try {
-      const res = await axios.get<SavedTracksResponse>(E.GetUsersSavedTracks);
+      const res = await axios.get<SavedTracksResponse>(E.GetSavedTracks);
       return res.data;
     } catch (err) {
       let error: AxiosError<ValidationErrors> = err;
@@ -104,14 +106,14 @@ export const fetchUsersSavedTracks = createAsyncThunk<
   }
 );
 
-export const fetchUsersTopTracks = createAsyncThunk<
+export const fetchTopTracks = createAsyncThunk<
   TopTracksResponse,
   TopTracksParams | void,
   {
     rejectValue: ValidationErrors;
     state: RootState;
   }
->('library/fetchUsersTopTracks', async (params, { rejectWithValue }) => {
+>('library/fetchTopTracks', async (params, { rejectWithValue }) => {
   const axios = instance<TopTracksParams>({
     params: {
       limit: 50,
@@ -121,7 +123,34 @@ export const fetchUsersTopTracks = createAsyncThunk<
   });
 
   try {
-    const res = await axios.get<TopTracksResponse>(E.GetUsersTopTracks);
+    const res = await axios.get<TopTracksResponse>(E.GetTopTracks);
+    return res.data;
+  } catch (err) {
+    let error: AxiosError<ValidationErrors> = err;
+    if (!error.response) {
+      throw err;
+    }
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const fetchRecentlyPlayedTracks = createAsyncThunk<
+  RecentlyPlayedTracksResponse,
+  RecentlyPlayedTracksParams | void,
+  {
+    rejectValue: ValidationErrors;
+    state: RootState;
+  }
+>('library/fetchRecentlyPlayedTracks', async (params, { rejectWithValue }) => {
+  const axios = instance<RecentlyPlayedTracksParams>({
+    params: {
+      limit: 50,
+      ...params,
+    },
+  });
+
+  try {
+    const res = await axios.get<RecentlyPlayedTracksResponse>(E.GetRecentlyPlayedTracks);
     return res.data;
   } catch (err) {
     let error: AxiosError<ValidationErrors> = err;
