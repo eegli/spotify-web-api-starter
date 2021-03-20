@@ -41,7 +41,7 @@ Either clone this repo and use it as a starting point or copy paste the revelant
 
 #### Is it safe to use?
 
-Yes. The demo uses read-only scopes [`user-read-email` `user-top-read` `user-library-read`](https://developer.spotify.com/documentation/general/guides/scopes/) and does not change or store your data anywhere. The access token you see only lives for 1 hour and is bound to the scope. The data does not leave your browser.
+Yes. The demo uses read-only scopes [`user-read-email` `user-top-read` `user-library-read` `user-read-recently-played`](https://developer.spotify.com/documentation/general/guides/scopes/) and does not change or store your data anywhere. The access token you see only lives for 1 hour and is bound to the scope. The data does not leave your browser.
 
 #### Logging
 

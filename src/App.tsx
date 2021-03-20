@@ -16,8 +16,9 @@ import {
 import {
   fetchArtistGenres,
   fetchAudioFeatures,
-  fetchUsersSavedTracks,
-  fetchUsersTopTracks,
+  fetchRecentlyPlayedTracks,
+  fetchSavedTracks,
+  fetchTopTracks,
 } from './redux/library/library.actions';
 import {
   libraryFetchStatusSelector,
@@ -53,6 +54,9 @@ const App: React.FC = () => {
   const showLibraryFull = useSelector((s: RootState) => s.app.showFullLibrary);
   const dataDisplay = useSelector((s: RootState) => s.app.dataToDisplay);
   const topTracks = useSelector((s: RootState) => s.library.extras.topTracks);
+  const recentlyPlayedTracks = useSelector(
+    (s: RootState) => s.library.extras.recentlyPlayedTracks
+  );
   const audioFeatures = useSelector((s: RootState) => s.library.extras.audioFeatures);
 
   // * Derived selectors
@@ -61,7 +65,7 @@ const App: React.FC = () => {
 
   // * [DEMO] What will be shown on the page
   // Set how many tracks you want to fetch & display initially
-  const demoDisplayTop = 10;
+  const demoDisplayTopAndRecent = 10;
   const demoDisplaySaved = 3;
   const savedTracksDemo = useMemo(() => savedTracks.slice(0, demoDisplaySaved), [
     savedTracks,
@@ -133,7 +137,7 @@ const App: React.FC = () => {
     if (token.accessToken) {
       let artistIds: string;
       let trackIds: string;
-      dispatch(fetchUsersSavedTracks({ limit: demoDisplaySaved }))
+      dispatch(fetchSavedTracks({ limit: demoDisplaySaved }))
         .then(unwrapResult)
         .then(res => {
           artistIds = res.items.map(el => el.track.artists[0].id).join(',');
@@ -141,10 +145,13 @@ const App: React.FC = () => {
           return dispatch(fetchArtistGenres({ ids: artistIds }));
         })
         .then(() => dispatch(fetchAudioFeatures({ ids: trackIds })))
-        .then(() => dispatch(fetchUsersTopTracks({ limit: demoDisplayTop })))
+        .then(() => dispatch(fetchTopTracks({ limit: demoDisplayTopAndRecent })))
+        .then(() =>
+          dispatch(fetchRecentlyPlayedTracks({ limit: demoDisplayTopAndRecent }))
+        )
         .catch(() => {});
     }
-  }, [dispatch, token.accessToken, demoDisplayTop, demoDisplaySaved]);
+  }, [dispatch, token.accessToken, demoDisplayTopAndRecent, demoDisplaySaved]);
 
   // * Since only 50 tracks can be requested at once, the user's
   // * library needs to be fetched recursively. Procedure is as above
@@ -157,7 +164,7 @@ const App: React.FC = () => {
   const fetchRecursively = () => {
     let artistIds: string;
     let trackIds: string;
-    dispatch(fetchUsersSavedTracks())
+    dispatch(fetchSavedTracks())
       .then(unwrapResult)
       .then(res => {
         artistIds = res.items.map(el => el.track.artists[0].id).join(',');
@@ -280,15 +287,15 @@ const App: React.FC = () => {
             </div>
           </>
         )}
-        {/* **** USER LIBRARY CURRENT 3 TOP SONGS **** */}
+        {/* **** USER LIBRARY CURRENT TOP SONGS **** */}
         {token.accessToken && (
           <>
             <hr />
             <div className="col">
               <h2>Your Top Songs</h2>
               <p>
-                Here are your {demoDisplayTop} favorite songs based on calculated affinity
-                (short period).
+                Here are your {demoDisplayTopAndRecent} favorite songs based on calculated
+                affinity (short period).
               </p>
               <table className="table table-striped">
                 <thead>
@@ -300,12 +307,42 @@ const App: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {topTracks.slice(0, demoDisplayTop).map((el, idx) => (
+                  {topTracks.map((el, idx) => (
                     <tr key={el.trackId}>
                       <th scope="row">{idx + 1}</th>
                       <th>{el.title}</th>
                       <th>{el.artists.join(', ')}</th>
                       <th>{el.popularity}</th>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+        {/* **** USER LIBRARY RECENTLY PLAYED **** */}
+        {token.accessToken && (
+          <>
+            <hr />
+            <div className="col">
+              <h2>Your Recently Played Songs</h2>
+              <p>Here are your {demoDisplayTopAndRecent} recently played songs.</p>
+              <table className="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Artist</th>
+                    <th scope="col">Played at</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentlyPlayedTracks.map((el, idx) => (
+                    <tr key={el.trackId + el.playedAt}>
+                      <th scope="row">{idx + 1}</th>
+                      <th>{el.title}</th>
+                      <th>{el.artists.join(', ')}</th>
+                      <th>{new Date(el.playedAt).toLocaleString()}</th>
                     </tr>
                   ))}
                 </tbody>

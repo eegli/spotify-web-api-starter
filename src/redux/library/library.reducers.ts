@@ -3,8 +3,9 @@ import { ErrorState, PagingObject } from '../types';
 import {
   fetchArtistGenres,
   fetchAudioFeatures,
-  fetchUsersSavedTracks,
-  fetchUsersTopTracks,
+  fetchRecentlyPlayedTracks,
+  fetchSavedTracks,
+  fetchTopTracks,
 } from './library.actions';
 
 type GenreArtistObj = {
@@ -21,6 +22,13 @@ type TopTracksObj = {
   popularity: number;
 };
 
+type RecentlyPlayedTracksObj = {
+  trackId: string;
+  title: string;
+  artists: string[];
+  playedAt: string;
+};
+
 // * TRACKS holds the basic saved track objects of a users library
 //
 // * EXTRAS holds all the extra data then can be used to enrich the
@@ -33,6 +41,8 @@ interface LibraryState extends ErrorState {
   extras: {
     topTracks: TopTracksObj[];
     audioFeatures: SpotifyApi.AudioFeaturesObject[];
+    recentlyPlayedTracks: RecentlyPlayedTracksObj[];
+    // TODO: Fetch audio analysis
     audioAnalysis?: any;
   };
   trackCount: number;
@@ -47,6 +57,7 @@ const initialState: LibraryState = {
   extras: {
     topTracks: [],
     audioFeatures: [],
+    recentlyPlayedTracks: [],
   },
   trackCount: 0,
   error: null,
@@ -62,25 +73,40 @@ const librarySlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(fetchUsersSavedTracks.fulfilled, (state, { payload }) => {
+      .addCase(fetchSavedTracks.fulfilled, (state, { payload }) => {
         state.tracks.items = [...state.tracks.items, ...payload.items];
         state.trackCount = payload.total;
         state.tracks.hasNextPage = !!payload.next;
       })
-      .addCase(fetchUsersSavedTracks.rejected, (state, { payload }) => {
+      .addCase(fetchSavedTracks.rejected, (state, { payload }) => {
         if (payload) state.error = payload.error;
       })
-      .addCase(fetchUsersTopTracks.fulfilled, (state, { payload }) => {
+
+      .addCase(fetchTopTracks.fulfilled, (state, { payload }) => {
         // For the demo, we don't need to append to existing top
         // tracks. The initial request is enough
         state.extras.topTracks = payload.items.map(el => ({
+          trackId: el.id,
           title: el.name,
           artists: el.artists.map(obj => obj.name),
           popularity: el.popularity,
-          trackId: el.id,
         }));
       })
-      .addCase(fetchUsersTopTracks.rejected, (state, { payload }) => {
+      .addCase(fetchTopTracks.rejected, (state, { payload }) => {
+        if (payload) state.error = payload.error;
+      })
+
+      // For the demo, we don't need to append to existing recently
+      // played tracks. The initial request is enough
+      .addCase(fetchRecentlyPlayedTracks.fulfilled, (state, { payload }) => {
+        state.extras.recentlyPlayedTracks = payload.items.map(el => ({
+          trackId: el.track.id,
+          title: el.track.name,
+          artists: el.track.artists.map(obj => obj.name),
+          playedAt: el.played_at,
+        }));
+      })
+      .addCase(fetchRecentlyPlayedTracks.rejected, (state, { payload }) => {
         if (payload) state.error = payload.error;
       })
 
@@ -98,6 +124,7 @@ const librarySlice = createSlice({
       .addCase(fetchArtistGenres.rejected, (state, { payload }) => {
         if (payload) state.error = payload.error;
       })
+
       .addCase(fetchAudioFeatures.fulfilled, (state, { payload }) => {
         state.extras.audioFeatures = [
           ...state.extras.audioFeatures,
